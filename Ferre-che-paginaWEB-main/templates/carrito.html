@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Sitio Web</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+  <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/slider.css') }}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/chatbot.css') }}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+</head>
+
+<body class="w-full text-center">
+
+  <!-- Menú de navegación -->
+  <header class="w-full">
+
+    <!-- Encabezado rojo -->
+    <div class="bg-red-900 py-4"></div>
+
+    <!-- Fila blanca con logo, buscador, iconos -->
+    <div class="bg-white shadow flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 py-3 gap-4">
+
+      <!-- Izquierda: Logo + Nombre + Botón menú -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-icons-outlined text-3xl text-red-700">handyman</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-800">FERRE-CHE</h1>
+        </div>
+
+        <!-- Botón menú hamburguesa -->
+        <button id="menu-toggle" class="lg:hidden text-gray-700">
+          ☰
+        </button>
+      </div>
+
+      <!-- Centro: Buscador -->
+      <div class="w-full sm:flex-1 sm:mx-6">
+        <div class="flex border rounded overflow-hidden w-full max-w-md mx-auto">
+          <input type="text" placeholder="¿Qué producto estás buscando?"
+            class="flex-1 px-3 py-2 focus:outline-none text-sm md:text-base">
+          <button class="bg-gray-300 px-3 sm:px-4">
+            <span class="material-icons-outlined">search</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Derecha: Dropdown + Botones -->
+      <div class="flex items-center gap-4 w-full sm:w-auto justify-center sm:justify-end">
+
+        <!-- Menú desplegable usuario -->
+        <div class="relative inline-block group">
+          <button id="userMenuButton" type="button"
+            class="flex items-center gap-1 hover:text-red-600 text-lg px-2 py-1 focus:outline-none"
+            aria-expanded="false" aria-controls="userMenu">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span class="hidden sm:inline">Iniciar sesión</span>
+          </button>
+          <div id="userMenu"
+            class="absolute left-0 top-full mt-0 w-44 bg-red-600 rounded shadow-lg hidden group-hover:block group-focus-within:block z-50">
+            <a href="#" id="openLoginModal" class="block px-4 py-2 text-white hover:bg-red-700">Iniciar sesión</a>
+            <a href="{{ url_for('formulario') }}" class="block px-4 py-2 text-white hover:bg-red-700">Regístrate</a>
+            <a href="#" class="block px-4 py-2 text-white hover:bg-red-700">Mi cuenta</a>
+          </div>
+        </div>
+
+        <!-- Otros botones -->
+        <a href="#" class="flex items-center gap-1 hover:text-red-600 text-lg">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <span class="hidden sm:inline">Envío</span>
+        </a>
+        <a href="{{ url_for('carrito') }}" class="flex items-center gap-1 hover:text-red-600 text-lg">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          <span class="hidden sm:inline" id="cart-header-total">Carrito S/0.00</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Menú de navegación -->
+    <nav class="bg-white border-t border-b px-4 sm:px-8">
+      <ul
+        class="hidden lg:flex justify-center gap-10 xl:gap-20 font-semibold text-gray-700 leading-loose text-sm md:text-base">
+        <li><a href="{{ url_for('index') }}"
+            class="py-2 px-3 hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='index' %}text-red-600 border-red-600{% endif %}">INICIO</a>
+        </li>
+        <li><a href="{{ url_for('producto') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='producto' %}text-red-600 border-red-600{% endif %}">PRODUCTO</a>
+        </li>
+        <li><a href="{{ url_for('nosotros') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='nosotros' %}text-red-600 border-red-600{% endif %}">NOSOTROS</a>
+        </li>
+        <li><a href="{{ url_for('catalogo') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='catalogo' %}text-red-600 border-red-600{% endif %}">CATÁLOGO</a>
+        </li>
+        <li><a href="{{ url_for('marcas') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='marcas' %}text-red-600 border-red-600{% endif %}">MARCAS</a>
+        </li>
+        <li><a href="{{ url_for('contacto') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='contacto' %}text-red-600 border-red-600{% endif %}">CONTACTENOS</a>
+        </li>
+      </ul>
+
+      <!-- Menú móvil (oculto por defecto) -->
+      <ul id="mobile-menu" class="hidden flex-col gap-2 font-semibold text-gray-700 lg:hidden py-4">
+        <li><a href="{{ url_for('index') }}">INICIO</a></li>
+        <li><a href="{{ url_for('producto') }}">PRODUCTO</a></li>
+        <li><a href="{{ url_for('nosotros') }}">NOSOTROS</a></li>
+        <li><a href="{{ url_for('catalogo') }}">CATÁLOGO</a></li>
+        <li><a href="{{ url_for('marcas') }}">MARCAS</a></li>
+        <li><a href="{{ url_for('contacto') }}">CONTACTENOS</a></li>
+      </ul>
+    </nav>
+  </header>
+
+      <!-- MAIN: Contenido principal con lista de productos en el carrito y el resumen -->
+  <main class="container mx-auto p-6 mt-10">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <div class="flex-1">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Carrito de Compras</h2>
+        <!-- Contenedor dinámico: aquí se renderizan los items desde localStorage -->
+        <div id="carrito-items"></div>
+      </div>
+      <!-- Panel derecho: resumen del pedido, envío y total -->
+      <div class="w-full lg:w-1/3 bg-white p-6 rounded-lg shadow-lg h-fit">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Resumen del Pedido</h3>
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-gray-700">Subtotal:</span>
+          <span class="font-semibold" id="subtotal">S/ 0.00</span>
+        </div>
+        <div class="flex justify-between items-center border-b pb-2 mb-2">
+          <span class="text-gray-700">Envío:</span>
+          <span class="font-semibold" id="envio">S/ 0.00</span>
+        </div>
+        <div class="flex justify-between items-center font-bold text-xl pt-2">
+          <span>Total:</span>
+          <span id="total">S/ 0.00</span>
+        </div>
+        <!-- Botón de acción: en producción debería redirigir a la pasarela de pago -->
+        <button class="mt-6 w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition duration-300">
+          Proceder al Pago
+        </button>
+      </div>
+    </div>
+  </main>
+      <!-- Logo y descripción -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-icons-outlined text-red-600">handyman</span>
+          <h2 class="text-2xl font-bold">FERRE-CHE</h2>
+        </div>
+        <p class="text-gray-400 text-sm">
+          Tu ferretería de confianza, ofreciendo calidad y compromiso en cada producto para tu hogar y proyectos.
+        </p>
+      </div>
+
+<!-- === INICIO: Footer === -->
+  <footer class="bg-gray-900 text-gray-200 py-10 mt-10">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-icons-outlined text-red-600">handyman</span>
+          <h2 class="text-2xl font-bold">FERRE-CHE</h2>
+        </div>
+        <p class="text-gray-400 text-sm">
+          Tu ferretería de confianza, ofreciendo calidad y compromiso en cada producto para tu hogar y proyectos.
+        </p>
+      </div>
+
+      <!-- Enlaces rápidos -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Enlaces rápidos</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="{{ url_for('index') }}" class="hover:text-red-500">Inicio</a></li>
+          <li><a href="{{ url_for('producto') }}" class="hover:text-red-500">Producto</a></li>
+          <li><a href="{{ url_for('catalogo') }}" class="hover:text-red-500">Catálogo</a></li>
+          <li><a href="{{ url_for('marcas') }}" class="hover:text-red-500">Marcas</a></li>
+          <li><a href="{{ url_for('contacto') }}" class="hover:text-red-500">Contáctenos</a></li>
+        </ul>
+      </div>
+
+      <!-- Información de contacto -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Contáctanos</h3>
+        <ul class="space-y-2 text-sm text-gray-400">
+          <li><span class="material-icons-outlined text-red-600 align-middle">location_on</span> Av. Principal #123 - Lima</li>
+          <li><span class="material-icons-outlined text-red-600 align-middle">call</span> +51 987 654 321</li>
+          <li><span class="material-icons-outlined text-red-600 align-middle">email</span> ferreche@empresa.com</li>
+        </ul>
+      </div>
+
+      <!-- Redes sociales -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Síguenos</h3>
+        <div class="flex gap-4 text-xl">
+          <a href="#" class="hover:text-red-500"><span class="material-icons-outlined">facebook</span></a>
+          <a href="#" class="hover:text-red-500"><span class="material-icons-outlined">photo_camera</span></a>
+          <a href="#" class="hover:text-red-500"><span class="material-icons-outlined">alternate_email</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-gray-500 text-sm mt-8 border-t border-gray-700 pt-4">
+      © 2025 FERRE-CHE. Todos los derechos reservados.
+    </div>
+  </footer>
+  
+   <!-- Modal de Inicio de Sesión -->
+<div id="loginModal" class="fixed inset-0 flex items-center justify-center hidden z-50">
+
+  <!-- Capa de fondo negro semi-transparente -->
+  <div class="absolute inset-0 bg-black opacity-50"></div>
+
+  <!-- Capa con desenfoque -->
+  <div class="absolute inset-0 backdrop-blur-sm"></div>
+
+  <!-- Contenido del modal -->
+  <div class="relative bg-white w-full max-w-md p-6 rounded-lg shadow-xl z-10">
+
+    <!-- Botón cerrar -->
+    <button id="closeLoginModal" class="absolute top-3 right-4 text-gray-500 hover:text-black text-xl">
+      &times;
+    </button>
+
+
+    <h2 class="text-2xl font-bold mb-4 text-center">Iniciar sesión</h2>
+
+
+    <form class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Correo</label>
+        <input type="email" placeholder="Escribe tu correo"
+               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input type="password" placeholder="Escribe tu contraseña"
+               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+
+
+      <div class="text-right text-sm">
+        <a href="#" class="text-red-600 hover:underline">¿Olvidaste tu contraseña?</a>
+      </div>
+
+
+      <button type="submit"
+              class="w-full bg-red-700 text-white py-2 rounded-md hover:bg-red-800 transition">
+        Ingresar
+      </button>
+
+
+      <div class="text-center text-gray-500 text-sm mt-4">O inicia sesión con</div>
+
+
+      <button type="button"
+              class="w-full border border-gray-300 py-2 rounded-md mt-2 hover:bg-gray-100 transition">
+        Google
+      </button>
+
+
+      <p class="text-sm text-center mt-4">
+        ¿No tienes una cuenta?
+        <a href="#" class="text-red-700 font-semibold hover:underline">Registrarme</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+  <script src="{{ url_for('static', filename='js/boton.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/contacto.js') }}"></script>
+  <!-- SCRIPTS: externalizado a static/js/carrito.js -->
+  <script src="{{ url_for('static', filename='js/carrito.js') }}"></script>
+    <!-- Toast de notificación -->
+  <div id="toast" class="fixed top-6 right-6 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-semibold text-base opacity-0 pointer-events-none transition-opacity duration-500">
+    <span id="toast-msg">Producto agregado al carrito</span>
+  </div>
+</body>
+</html>

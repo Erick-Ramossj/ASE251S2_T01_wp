@@ -1,0 +1,25 @@
+@layer components {
+  .carousel-container {
+    @apply overflow-hidden w-full max-w-screen-xl mx-auto relative;
+  }
+
+  .carousel-track {
+    @apply flex transition-transform duration-500 ease-in-out;
+  }
+
+  .carousel-item {
+    @apply w-full flex-shrink-0;
+  }
+
+  .carousel-dot {
+    @apply w-3 h-3 rounded-full bg-gray-400 opacity-50 cursor-pointer transition-all duration-300;
+  }
+
+  .carousel-dot-active {
+    @apply bg-gray-800 opacity-100;
+  }
+
+  .carousel-btn {
+    @apply bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75;
+  }
+}

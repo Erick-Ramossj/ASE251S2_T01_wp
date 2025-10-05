@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Sitio Web</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+  <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/slider.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/chatbot.css') }}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+</head>
+
+<body class="w-full text-center">
+
+  <!-- Menú de navegación -->
+  <header class="w-full">
+
+    <!-- Encabezado rojo -->
+    <div class="bg-red-900 py-4"></div>
+
+    <!-- Fila blanca con logo, buscador, iconos -->
+    <div class="bg-white shadow flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 py-3 gap-4">
+
+      <!-- Izquierda: Logo + Nombre + Botón menú -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-icons-outlined text-3xl text-red-700">handyman</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-800">FERRE-CHE</h1>
+        </div>
+
+        <!-- Botón menú hamburguesa -->
+        <button id="menu-toggle" class="lg:hidden text-gray-700">
+          ☰
+        </button>
+      </div>
+
+      <!-- Centro: Buscador -->
+      <div class="w-full sm:flex-1 sm:mx-6">
+       <div class="flex border border-gray-300 rounded overflow-hidden w-full max-w-md mx-auto">
+          <input type="text" placeholder="¿Qué producto estás buscando?"
+            class="flex-1 px-3 py-2 focus:outline-none text-sm md:text-base">
+          <button class="bg-gray-300 px-3 sm:px-4">
+            <span class="material-icons-outlined">search</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Derecha: Dropdown + Botones -->
+      <div class="flex items-center gap-4 w-full sm:w-auto justify-center sm:justify-end">
+
+        <!-- Menú desplegable usuario -->
+        <div class="relative inline-block group">
+          <button id="userMenuButton" type="button"
+            class="flex items-center gap-1 hover:text-red-600 text-lg px-2 py-1 focus:outline-none"
+            aria-expanded="false" aria-controls="userMenu">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span class="hidden sm:inline">Iniciar sesión</span>
+          </button>
+          <div id="userMenu"
+            class="absolute left-0 top-full mt-0 w-44 bg-red-600 rounded shadow-lg hidden group-hover:block group-focus-within:block z-50">
+            <a href="#" id="openLoginModal" class="block px-4 py-2 text-white hover:bg-red-700">Iniciar sesión</a>
+            <a href="{{ url_for('formulario') }}" class="block px-4 py-2 text-white hover:bg-red-700">Regístrate</a>
+            <a href="{{ url_for('micuenta') }}" class="block px-4 py-2 text-white hover:bg-red-700">Mi cuenta</a>
+          </div>
+        </div>
+
+        <!-- Otros botones -->
+        <a href="#" class="flex items-center gap-1 hover:text-red-600 text-lg">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <span class="hidden sm:inline">Envío</span>
+        </a>
+
+        <a href="{{ url_for('carrito') }}" class="flex items-center gap-1 hover:text-red-600 text-lg">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          <span class="hidden sm:inline">Carrito S/0.00</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Menú de navegación -->
+    <nav class="bg-white border-t border-b border-gray-300 px-4 sm:px-8">
+      <ul
+        class="hidden lg:flex justify-center gap-10 xl:gap-20 font-semibold text-gray-700 leading-loose text-sm md:text-base">
+        <li><a href="{{ url_for('index') }}"
+            class="py-2 px-3 hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='index' %}text-red-600 border-red-600{% endif %}">INICIO</a>
+        </li>
+        <li><a href="{{ url_for('producto') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='producto' %}text-red-600 border-red-600{% endif %}">PRODUCTO</a>
+        </li>
+        <li><a href="{{ url_for('nosotros') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='nosotros' %}text-red-600 border-red-600{% endif %}">NOSOTROS</a>
+        </li>
+        <li><a href="{{ url_for('catalogo') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='catalogo' %}text-red-600 border-red-600{% endif %}">CATÁLOGO</a>
+        </li>
+        <li><a href="{{ url_for('marcas') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='marcas' %}text-red-600 border-red-600{% endif %}">MARCAS</a>
+        </li>
+        <li><a href="{{ url_for('contacto') }}"
+            class="hover:text-red-600 border-b-2 border-transparent hover:border-red-600 {% if active_page=='contacto' %}text-red-600 border-red-600{% endif %}">CONTACTENOS</a>
+        </li>
+      </ul>
+
+      <!-- Menú móvil (oculto por defecto) -->
+      <ul id="mobile-menu" class="hidden flex-col gap-2 font-semibold text-gray-700 lg:hidden py-4">
+        <li><a href="{{ url_for('index') }}">INICIO</a></li>
+        <li><a href="{{ url_for('producto') }}">PRODUCTO</a></li>
+        <li><a href="{{ url_for('nosotros') }}">NOSOTROS</a></li>
+        <li><a href="{{ url_for('catalogo') }}">CATÁLOGO</a></li>
+        <li><a href="{{ url_for('marcas') }}">MARCAS</a></li>
+        <li><a href="{{ url_for('contacto') }}">CONTACTENOS</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
+  <h2 class="text-2xl font-bold text-center mb-6">Regístrate para comprar</h2>
+
+  <!-- Botón toggle -->
+  <div class="flex justify-center items-center mb-6">
+    <button id="btnUsuario" 
+            class="px-6 py-2 rounded-l-md bg-red-600 text-white font-semibold focus:outline-none">
+      Usuario
+    </button>
+    <button id="btnEmpresa" 
+            class="px-6 py-2 rounded-r-md bg-gray-200 text-gray-700 font-semibold focus:outline-none">
+      Empresa
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Form Usuario -->
+    <form id="formUsuario" class="p-4 rounded-md bg-red-50">
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Correo</label>
+        <input type="email" class="w-full border rounded p-2" placeholder="Ingresa un correo">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Nombre y Apellidos</label>
+        <input type="text" class="w-full border rounded p-2" placeholder="Ingresa tu nombre">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Información Profesional</label>
+        <select class="w-full border rounded p-2">
+          <option>Especialidad</option>
+          <option>Electricista</option>
+          <option>Gafitero</option>
+          <option>Carpintero</option>
+          <option>Maestro de obra</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Tipo de documento</label>
+        <input type="text" class="w-full border rounded p-2" placeholder="DNI">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Celular</label>
+        <input type="tel" class="w-full border rounded p-2" placeholder="+51">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Contraseña</label>
+        <input type="password" class="w-full border rounded p-2">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Confirmar Contraseña</label>
+        <input type="password" class="w-full border rounded p-2">
+      </div>
+      <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md">Registrarse</button>
+    </form>
+
+    <!-- Form Empresa -->
+    <form id="formEmpresa" class="p-4 rounded-md bg-gray-100 opacity-50 pointer-events-none">
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Correo</label>
+        <input type="email" class="w-full border rounded p-2" placeholder="Ingresa un correo">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Razón Social</label>
+        <input type="text" class="w-full border rounded p-2" placeholder="Nombre legal de la empresa">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Dirección</label>
+        <input type="text" class="w-full border rounded p-2" placeholder="Dirección de la empresa">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Tipo de Empresa</label>
+        <select class="w-full border rounded p-2">
+          <option>Selecciona</option>
+          <option>S.A</option>
+          <option>S.A.C</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">RUC</label>
+        <input type="text" class="w-full border rounded p-2" placeholder="Número de RUC">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Celular</label>
+        <input type="tel" class="w-full border rounded p-2" placeholder="+51">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Contraseña</label>
+        <input type="password" class="w-full border rounded p-2">
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Confirmar Contraseña</label>
+        <input type="password" class="w-full border rounded p-2">
+      </div>
+      <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md">Registrarse</button>
+    </form>
+  </div>
+</div>
+
+     <!-- === INICIO: Footer === -->
+  <footer class="bg-gray-900 text-gray-200 py-10 mt-10">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <!-- Logo y descripción -->
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-icons-outlined text-red-600">handyman</span>
+          <h2 class="text-2xl font-bold">FERRE-CHE</h2>
+        </div>
+        <p class="text-gray-400 text-sm">
+          Tu ferretería de confianza, ofreciendo calidad y compromiso en cada producto para tu hogar y proyectos.
+        </p>
+      </div>
+
+      <!-- Enlaces rápidos -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Enlaces rápidos</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="{{ url_for('index') }}" class="hover:text-red-500">Inicio</a></li>
+          <li><a href="{{ url_for('producto') }}" class="hover:text-red-500">Producto</a></li>
+          <li><a href="{{ url_for('catalogo') }}" class="hover:text-red-500">Catálogo</a></li>
+          <li><a href="{{ url_for('marcas') }}" class="hover:text-red-500">Marcas</a></li>
+          <li><a href="{{ url_for('contacto') }}" class="hover:text-red-500">Contáctenos</a></li>
+        </ul>
+      </div>
+
+      <!-- Información de contacto -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Contáctanos</h3>
+        <ul class="space-y-2 text-sm text-gray-400">
+          <li><span class="material-icons-outlined text-red-600 align-middle">location_on</span> Av. Principal #123 - Lima</li>
+          <li><span class="material-icons-outlined text-red-600 align-middle">call</span> +51 987 654 321</li>
+          <li><span class="material-icons-outlined text-red-600 align-middle">email</span> ferreche@empresa.com</li>
+        </ul>
+      </div>
+
+      <!-- Redes sociales -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Síguenos</h3>
+        <div class="flex gap-4 text-xl">
+          <a href="#" class="hover:text-red-500"><span class="material-icons-outlined">facebook</span></a>
+          <a href="#" class="hover:text-red-500"><span class="material-icons-outlined">photo_camera</span></a>
+          <a href="#" class="hover:text-red-500"><span class="material-icons-outlined">alternate_email</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-gray-500 text-sm mt-8 border-t border-gray-700 pt-4">
+      © 2025 FERRE-CHE. Todos los derechos reservados.
+    </div>
+  </footer>
+  
+  <!-- === FIN: Footer === -->
+
+  <!--CHATBOT PARA TODAS LAS PAGINAS-->
+  <div id="floating-chat-button" class="fixed bottom-6 right-6 z-40 cursor-pointer">
+    <div class="flex items-center gap-3">
+      <span class="bg-white text-gray-800 px-4 py-2 rounded-full shadow-lg text-lg font-semibold hidden md:block">
+        Hola, ¿necesitas ayuda?
+      </span>
+      <div class="w-16 h-16 bg-red-800 rounded-full flex items-center justify-center shadow-lg p-2">
+        <img src="{{ url_for('static', filename='image/robot-icon.png') }}" alt="Abrir chat"
+          class="w-full h-full object-contain">
+      </div>
+    </div>
+  </div>
+
+   <!--INICIO DE CHATBOT-->
+  <div id="chatbot-overlay" class="hidden fixed inset-0 flex items-center justify-center z-50" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div id="chatbot-window"
+      class="relative bg-white rounded-lg shadow-xl w-11/12 max-w-lg flex flex-col max-h-[90vh] overflow-hidden">
+
+      <div class="bg-red-800 text-white p-4 rounded-t-lg flex items-center justify-center relative pb-8">
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 z-20"> <img
+            src="{{ url_for('static', filename='image/robot-icon.png') }}" alt="Icono del Chatbot"
+            class="chatbot-header-icon w-20 h-20 bg-red-800 p-2 rounded-full border-4 border-white shadow-lg object-contain -mt-4">
+        </div>
+
+        <h3 class="font-bold text-lg text-center flex-grow">Ferre-Bot Asistente</h3>
+
+        <button id="close-chat-btn"
+          class="hover:text-gray-300 text-2xl absolute right-4 top-1/2 -translate-y-1/2 z-20">&times;</button>
+      </div>
+
+      <div id="chat-messages" class="flex-1 p-4 space-y-4 overflow-y-auto">
+      </div>
+
+      <div id="quick-actions" class="p-4 bg-gray-100 border-t border-gray-200 flex flex-wrap gap-2 justify-center">
+        <button
+          class="quick-action-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm">Horarios</button>
+        <button
+          class="quick-action-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm">Ubicacion</button>
+        <button
+          class="quick-action-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm">Telefonos</button>
+        <button
+          class="quick-action-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm">Categorias</button>
+      </div>
+
+      <div class="p-4 border-t border-gray-200 bg-gray-50">
+        <form id="chat-form" class="flex gap-2">
+          <input type="text" id="chat-input" placeholder="Escribe un mensaje..." autocomplete="off"
+            class="flex-1 px-3 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500">
+          <button type="submit"
+            class="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-orange-600 shadow-md">
+            <span class="material-symbols-outlined">send</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+   <!-- Modal de Inicio de Sesión -->
+<div id="loginModal" class="fixed inset-0 flex items-center justify-center hidden z-50">
+
+  <!-- Capa de fondo negro semi-transparente -->
+  <div class="absolute inset-0 bg-black opacity-50"></div>
+
+  <!-- Capa con desenfoque -->
+  <div class="absolute inset-0 backdrop-blur-sm"></div>
+
+  <!-- Contenido del modal -->
+  <div class="relative bg-white w-full max-w-md p-6 rounded-lg shadow-xl z-10">
+
+    <!-- Botón cerrar -->
+    <button id="closeLoginModal" class="absolute top-3 right-4 text-gray-500 hover:text-black text-xl">
+      &times;
+    </button>
+
+
+    <h2 class="text-2xl font-bold mb-4 text-center">Iniciar sesión</h2>
+
+
+    <form class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Correo</label>
+        <input type="email" placeholder="Escribe tu correo"
+               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input type="password" placeholder="Escribe tu contraseña"
+               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+
+
+      <div class="text-right text-sm">
+        <a href="#" class="text-red-600 hover:underline">¿Olvidaste tu contraseña?</a>
+      </div>
+
+
+      <button type="submit"
+              class="w-full bg-red-700 text-white py-2 rounded-md hover:bg-red-800 transition">
+        Ingresar
+      </button>
+
+
+      <div class="text-center text-gray-500 text-sm mt-4">O inicia sesión con</div>
+
+
+      <button type="button"
+              class="w-full border border-gray-300 py-2 rounded-md mt-2 hover:bg-gray-100 transition">
+        Google
+      </button>
+
+
+      <p class="text-sm text-center mt-4">
+        ¿No tienes una cuenta?
+        <a href="#" class="text-red-700 font-semibold hover:underline">Registrarme</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+
+  <script src="{{ url_for('static', filename='js/boton.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/boton.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/contacto.js') }}"></script>
+
+</body>
+</html>
